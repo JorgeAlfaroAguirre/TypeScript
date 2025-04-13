@@ -1,5 +1,5 @@
 "use strict";
-console.log("OOP.ts loaded");
+console.log("OOP");
 console.log("🧱 1. Classes & Constructors");
 class Person {
     constructor(name, age) {
@@ -51,69 +51,59 @@ const PetOwner1 = new PetOwner("Carl", 27, pet1);
 console.log(PetOwner1.greet());
 console.log(PetOwner1.present());
 console.log(Pet.getPetCount());
-console.log("⚔️ Class with access modifiers");
-class Crawler {
-    constructor(name, hp, stamina, id) {
-        this.name = name;
-        this.hp = hp;
-        this.stamina = stamina;
+console.log("⚔️ 4. Access Modifiers, Getters, Setters, and the `this` Keyword");
+class Crawler extends Person {
+    constructor(name, age, _hp, id) {
+        super(name, age);
+        this._hp = _hp;
         this.id = id;
     }
-    takeDamage(amount) {
-        this.hp -= amount;
-        return `${this.name} took ${amount} damage. Remaining HP: ${this.hp}`;
+    greet() {
+        return `Hello, I'm ${this.name}, and I'm a crawler.\n`;
     }
-    getStamina() {
-        return this.stamina;
+    takeDamage(amount) {
+        this._hp -= amount;
+        return `${this.name} took ${amount} damage. Remaining HP: ${this._hp}`;
+    }
+    get hp() {
+        return this._hp;
+    }
+    set hp(value) {
+        this._hp = value;
+    }
+    damage(value) {
+        if (value < 0) {
+            console.error("Damage cannot be negative.");
+            return;
+        }
+        this._hp -= value;
+        return `${this.name} took ${value} damage. Remaining HP: ${this._hp}`;
     }
 }
-const crawler = new Crawler("Throg", 100, 50, 1);
+const crawler = new Crawler("Carl", 27, 100, 50);
 console.log(crawler.takeDamage(25));
 console.log(`Crawler ID: ${crawler.id}`);
-class Dog {
-    constructor(name) {
-        this.name = name;
-        this._mood = "neutral";
-    }
-    get mood() {
-        return `${this.name} feels ${this._mood}`;
-    }
-    set mood(value) {
-        if (["happy", "sad", "angry", "neutral"].includes(value)) {
-            this._mood = value;
-        }
-        else {
-            console.log("Invalid mood");
-        }
-    }
-}
-const doggo = new Dog("Manu");
-console.log(doggo.mood);
-doggo.mood = "happy";
-console.log(doggo.mood);
-doggo.mood = "confused";
 console.log("🧩 5. Interfaces");
-class Character {
-    constructor(name, level, hp) {
-        this.name = name;
-        this.level = level;
-        this.hp = hp;
+class CatCrawler extends Pet {
+    constructor(name, age, kind, title, petOwner) {
+        super(name, age, kind);
+        this.title = title;
+        this.petOwner = petOwner;
     }
-    heal(amount) {
-        this.hp += amount;
-        return `${this.name} healed for ${amount}. Current HP: ${this.hp}`;
+    miaow() {
+        return `No, ${this.petOwner.name}!`;
     }
-    takeDamage(amount) {
-        this.hp -= amount;
-        if (this.hp < 0)
-            this.hp = 0;
-        return `${this.name} took ${amount} damage. Current HP: ${this.hp}`;
+    scratch() {
+        return `I scratch ${this.petOwner.name} because I'm a ${this.kind} and ${this.boast()}`;
+    }
+    boast() {
+        return `I am ${this.title}!`;
     }
 }
-const hero = new Character("Zuko", 1, 100);
-console.log(hero.takeDamage(30));
-console.log(hero.heal(20));
-console.log("🧱 6. Abstract Classes and Methods");
+const princessDonut = new CatCrawler("Donut", 4, "cat", "Princess", crawler);
+console.log(princessDonut.miaow());
+console.log(princessDonut.scratch());
+console.log("🧱 6. Abstract Classes & Methods");
 class Vehicle {
     constructor(brand, passengers) {
         this.brand = brand;

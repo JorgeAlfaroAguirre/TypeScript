@@ -53,4 +53,4 @@ class Pokemon {
 }
 const charmander = new Pokemon();
 charmander.getMoves(4);
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=pokeapi.js.map

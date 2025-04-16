@@ -1,5 +1,9 @@
 import { Move, PokeapiResponse } from "./interfaces/pokeapi.response.interface";
-import { PokeApiAdapter } from "./api/pokeapi.adapter";
+import {
+  HttpAdapter,
+  PokeApiAdapter,
+  PokeApiFetchAdapter,
+} from "./api/pokeapi.adapter";
 
 export class Pokemon {
   get imageUrl(): string {
@@ -9,7 +13,7 @@ export class Pokemon {
   constructor(
     public readonly id: number,
     public name: string,
-    private readonly http: PokeApiAdapter
+    private readonly http: HttpAdapter
   ) {}
 
   scream() {
@@ -20,21 +24,30 @@ export class Pokemon {
     console.log(`${this.name}, ${this.name}`);
   }
 
-  async getMoves(): Promise<Move[]> {
+  async getMoves(): Promise<string[]> {
     // const { data } = await axios.get<PokeapiResponse>(
-    const { data } = await this.http.get("https://pokeapi.co/api/v2/pokemon/4");
-    // console.log(data.moves);
+    const data = await this.http.get<PokeapiResponse>(
+      `https://pokeapi.co/api/v2/pokemon/${this.id}`
+    );
+
     const { moves } = data;
 
-    console.log(moves);
+    const allMoves = moves.map((m) => m.move.name);
+    console.log(allMoves);
+    // console.log(moves[0].move.name); // flamethrower
 
-    return moves;
+    return allMoves;
   }
 }
 
 // export const charmander = new Pokemon(4, "Charmander");
 
-const pokeApi = new PokeApiAdapter();
-export const charmander = new Pokemon(4, "Charmander", pokeApi);
+const pokeApiAxios = new PokeApiAdapter();
+const pokeApiFetch = new PokeApiFetchAdapter();
+export const bulbasaur = new Pokemon(1, "bulbasaur", pokeApiAxios);
+export const charmander = new Pokemon(4, "Charmander", pokeApiFetch);
 
+console.log(bulbasaur.name);
+console.log(charmander.name);
+bulbasaur.getMoves();
 charmander.getMoves();

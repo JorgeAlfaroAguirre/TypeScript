@@ -12,8 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PokeApiAdapter = void 0;
+exports.PokeApiAdapter = exports.PokeApiFetchAdapter = void 0;
 const axios_1 = __importDefault(require("axios"));
+class PokeApiFetchAdapter {
+    get(url) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const resp = yield fetch(url);
+            const data = yield resp.json();
+            return data;
+        });
+    }
+}
+exports.PokeApiFetchAdapter = PokeApiFetchAdapter;
 class PokeApiAdapter {
     constructor() {
         this.axios = axios_1.default;
@@ -23,15 +33,6 @@ class PokeApiAdapter {
             const { data } = yield this.axios.get(url);
             return data;
         });
-    }
-    post(url, data) {
-        return __awaiter(this, void 0, void 0, function* () { });
-    }
-    patch(url, data) {
-        return __awaiter(this, void 0, void 0, function* () { });
-    }
-    delete(url, data) {
-        return __awaiter(this, void 0, void 0, function* () { });
     }
 }
 exports.PokeApiAdapter = PokeApiAdapter;

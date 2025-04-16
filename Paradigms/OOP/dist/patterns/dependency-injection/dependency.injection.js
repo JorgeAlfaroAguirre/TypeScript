@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.charmander = exports.Pokemon = void 0;
+exports.charmander = exports.bulbasaur = exports.Pokemon = void 0;
 const pokeapi_adapter_1 = require("./api/pokeapi.adapter");
 class Pokemon {
     get imageUrl() {
@@ -28,15 +28,21 @@ class Pokemon {
     }
     getMoves() {
         return __awaiter(this, void 0, void 0, function* () {
-            const { data } = yield this.http.get("https://pokeapi.co/api/v2/pokemon/4");
+            const data = yield this.http.get(`https://pokeapi.co/api/v2/pokemon/${this.id}`);
             const { moves } = data;
-            console.log(moves);
-            return moves;
+            const allMoves = moves.map((m) => m.move.name);
+            console.log(allMoves);
+            return allMoves;
         });
     }
 }
 exports.Pokemon = Pokemon;
-const pokeApi = new pokeapi_adapter_1.PokeApiAdapter();
-exports.charmander = new Pokemon(4, "Charmander", pokeApi);
+const pokeApiAxios = new pokeapi_adapter_1.PokeApiAdapter();
+const pokeApiFetch = new pokeapi_adapter_1.PokeApiFetchAdapter();
+exports.bulbasaur = new Pokemon(1, "bulbasaur", pokeApiAxios);
+exports.charmander = new Pokemon(4, "Charmander", pokeApiFetch);
+console.log(exports.bulbasaur.name);
+console.log(exports.charmander.name);
+exports.bulbasaur.getMoves();
 exports.charmander.getMoves();
 //# sourceMappingURL=dependency.injection.js.map
